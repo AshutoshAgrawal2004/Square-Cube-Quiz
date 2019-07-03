@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Quiz</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="intro">
+      <h1>Square & Cube Quiz</h1>
+      <label for="rangenum" id="rangenum">
+        Difficulty Range <br>
+        <input type="number" id="minnum" name="min" value=5>
+        - <input type="number" id="maxnum" name="max" value=15>
+      </label>
+      <label for="goaltime" id="goaltimename">
+        Select your goal time(in seconds)
+        <input type="range" id="goaltime" name="goaltime" value="20" min="5" max="300">
+        <output for="goaltime" onforminput="value = goaltime.valueAsNumber;"></output>
+      </label>
+      <label for="operation" id="operation">
+        Select the Operation
+
+        <label for="sq" id="sqname">
+          <input type="radio" class="fillit" id="sq" name="operation" checked="true">
+          Square</label>
+        <label for="cu" id="cuname">
+          <input type="radio" class="fillit" id="cu" name="operation">
+          Cube</label>
+        <label for="sqrt" id="sqrtname">
+          <input type="radio" class="fillit" id="sqrt" name="operation">
+          Square Root</label>
+        <label for="curt" id="curtname">
+          <input type="radio" class="fillit" id="curt" name="operation">
+          Cube Root</label>
+      </label>
+      <button id="start">START</button>
+    </div>
+    <div class="grid">
+      <div id="quiz">
+        <h1>Square & Cube Quiz</h1>
+        <div class="timer"><span id="timer"></span></div>
+        <hr style="margin-bottom: 10px">
+        <p id="question"></p>
+
+        <div class="buttons">
+          <button id="btn0"><span id="choice0"></span></button>
+          <button id="btn1"><span id="choice1"></span></button>
+          <button id="btn2"><span id="choice2"></span></button>
+          <button id="btn3"><span id="choice3"></span></button>
+        </div>
+
+        <hr style="margin-top: 10px">
+        <footer>
+          <p id="progress">Question x of y</p>
+        </footer>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var container = document.getElementsByClassName('container')[0];
+    container.style.height = window.innerHeight;
+    container.style.width = window.innerWidth;
+  </script>
+  <script src="question.js"></script>
+  <script src="quiz.js"></script>
+
+  <script src="app.js"></script>
+  <script type="text/javascript">
+    function modifyOffset() {
+      var el, newPoint, newPlace, offset, siblings, k;
+      width = this.offsetWidth;
+      newPoint = (this.value - this.getAttribute("min")) / (this.getAttribute("max") - this.getAttribute("min"));
+      offset = -1;
+      if (newPoint < 0) {
+        newPlace = 0;
+      } else if (newPoint > 1) {
+        newPlace = width;
+      } else {
+        newPlace = width * newPoint + offset;
+        offset -= newPoint;
+      }
+      siblings = this.parentNode.childNodes;
+      for (var i = 0; i < siblings.length; i++) {
+        sibling = siblings[i];
+        if (sibling.id == this.id) {
+          k = true;
+        }
+        if ((k == true) && (sibling.nodeName == "OUTPUT")) {
+          outputTag = sibling;
+        }
+      }
+      outputTag.style.left = newPlace + "px";
+      outputTag.style.marginLeft = offset + "%";
+      outputTag.innerHTML = this.value;
+    }
+
+    function modifyInputs() {
+
+      var inputs = document.getElementsByTagName("input");
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].getAttribute("type") == "range") {
+          inputs[i].onchange = modifyOffset;
+
+          // the following taken from http://stackoverflow.com/questions/2856513/trigger-onchange-event-manually
+          if ("fireEvent" in inputs[i]) {
+            inputs[i].fireEvent("onchange");
+          } else {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("change", false, true);
+            inputs[i].dispatchEvent(evt);
+          }
+        }
+      }
+    }
+
+    modifyInputs();
+  </script>
+</body>
+
+</html>
